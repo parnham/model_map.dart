@@ -1,7 +1,7 @@
 ModelMap 
 ========
 
-[![Build Status](https://drone.io/github.com/parnham/model_map.dart/status.png)](https://github.com/parnham/model_map.dart/latest)
+[![Build Status](https://drone.io/github.com/parnham/model_map.dart/status.png)](https://drone.io/github.com/parnham/model_map.dart/latest)
 
 An experiment in using mirrors to convert from a map to a model and vice versa.
 
