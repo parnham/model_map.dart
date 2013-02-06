@@ -101,7 +101,7 @@ class ComplexModel extends ModelMap
   int integer;
   SimpleModel simple                          = new SimpleModel();
   List<SimpleModel> modelList                 = new List<SimpleModel>();
-  Map<String, Date> dateMap                   = new Map<String, Date>();
+  Map<String, DateTime> dateMap               = new Map<String, DateTime>();
   Map<String, SimpleModel> modelMap           = new Map<String, SimpleModel>();
   Map<String, List<SimpleModel>> modelListMap = new Map<String, List<SimpleModel>>();
 }
@@ -122,24 +122,24 @@ as long as complex fields are initialised with empty instances.
 
 ### Handling a Date
 
-Date objects pose a problem, they are classed as complex and can therefore not be assigned
-using mirrors. But they are also immutable, which means you cannot initialise a Date field
+DateTime objects pose a problem, they are classed as complex and can therefore not be assigned
+using mirrors. But they are also immutable, which means you cannot initialise a DateTime field
 with an instance and have ModelMap modify the value.
 
-The way to handle a Date field in ModelMap is to register a setter.
+The way to handle a DateTime field in ModelMap is to register a setter.
 
 ```dart
 
 // This will not work
 class DateModel extends ModelMap
 {
-  Date date;
+  DateTime date;
 }
 
 // This will work
 class DateModelWithSetter extends ModelMap
 {
-  Date date;
+  DateTime date;
 
 
   DateModelWithSetter()
@@ -154,8 +154,8 @@ actual assignment. In fact, any field assignment can be overridden with register
 extending what ModelMap can cope with.
 
 The setter function would normally take a Map<String, dynamic> which is a sub-section of the
-complete map being parsed, but Date fields are a special case and ModelMap will actually pass
-a properly initialised Date instance to the setter.
+complete map being parsed, but DateTime fields are a special case and ModelMap will actually pass
+a properly initialised DateTime instance to the setter.
 
 When converting to JSON or a map, ModelMap will always convert dates to an ISO 8601 string, 
 however when parsing a map it will accept an ISO 8601 string or an integer representing
