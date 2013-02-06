@@ -115,7 +115,7 @@ abstract class ModelMap
           case "num":     if (map[n] is num)    futures.add(im.setField(n, map[n]));  break;
           case "bool":    if (map[n] is bool)   futures.add(im.setField(n, map[n]));  break;
 
-          case "Date":
+          case "DateTime":
             if (map.containsKey(n))
             {
               if (this._setters.containsKey(n))
@@ -278,7 +278,7 @@ abstract class ModelMap
     {
       completer.complete(value);
     }
-    else if (value is Date)
+    else if (value is DateTime)
     {
       // Use ISO 8601 format for the date
       completer.complete(value.toString().replaceFirst(' ', 'T'));
@@ -352,12 +352,12 @@ abstract class ModelMap
     }
     else switch (type)
     {
-      case "String":  completer.complete(value is String ? value : null); break;
-      case "int":     completer.complete(value is num ? value : null);    break;
-      case "double":  completer.complete(value is num ? value : null);    break;
-      case "num":     completer.complete(value is num ? value : null);    break;
-      case "bool":    completer.complete(value is bool ? value : false);  break;
-      case "Date":    completer.complete(_parseDate(value));              break;
+      case "String":    completer.complete(value is String ? value : null); break;
+      case "int":       completer.complete(value is num ? value : null);    break;
+      case "double":    completer.complete(value is num ? value : null);    break;
+      case "num":       completer.complete(value is num ? value : null);    break;
+      case "bool":      completer.complete(value is bool ? value : false);  break;
+      case "DateTime":  completer.complete(_parseDate(value));              break;
       default:
         // Attempt to create a new instance by looking up its class mirror in the
         // current library. If the instance is descended from ModelMap then it can
@@ -385,10 +385,10 @@ abstract class ModelMap
   // it is assumed to be a UTC representation of millisends since the epoch.
   // If the value is a string it is parsed with the default parser (which will handle
   // ISO 8601 styles dates).
-  Date _parseDate(dynamic value)
+  DateTime _parseDate(dynamic value)
   {
-    if (value is String)  return new Date.fromString(value);
-    if (value is int)     return new Date.fromMillisecondsSinceEpoch(value, isUtc: true);
+    if (value is String)  return DateTime.parse(value);
+    if (value is int)     return new DateTime.fromMillisecondsSinceEpoch(value, isUtc: true);
 
     return null;
   }
@@ -435,9 +435,9 @@ abstract class ModelMap
 
 
   // Populate a map from the map provided. Only maps with string keys are supported.
-  // Each of the values is parsed independently meaning they can be different
-  // from each other and also be complex types (such as maps, lists or ModelMap
-  // based classes).
+  // The names of the key and value type are extracted from the runtime type
+  // meaning that these must have been specified.
+  // Values can be complex types (such as maps, lists or ModelMap based classes).
   Future _setMap(String type, Map dst, Map map)
   {
     var completer = new Completer();
@@ -465,9 +465,9 @@ abstract class ModelMap
 
 
   // Populate a list from the supplied items.
-  // As with maps, each of the values is parsed independently meaning they can
-  // be different from each other and also be complex types (such as maps, lists
-  // or ModelMap based classes).
+  // As with maps, the type name of the list items is extracted from the runtime
+  // type and so must have been specified (i.e., List<String> and not just List).
+  // The item type can be complex though (such as maps, lists or ModelMap based classes).
   Future _setList(String type, List dst, List items)
   {
     var completer = new Completer();

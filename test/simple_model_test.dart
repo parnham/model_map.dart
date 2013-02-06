@@ -12,13 +12,13 @@ class SimpleModel extends ModelMap
 
 class SimpleModelWithDate extends ModelMap
 {
-  Date date;
+  DateTime date;
 }
 
 
 class SimpleModelWithDateSetter extends ModelMap
 {
-  Date date;
+  DateTime date;
 
 
   SimpleModelWithDateSetter()
@@ -31,7 +31,7 @@ class SimpleModelWithDateSetter extends ModelMap
 void simpleModelTest()
 {
   // Create an ISO 8601 date
-  var now   = new Date.now();
+  var now   = new DateTime.now();
   var date  = now.toString().replaceFirst(' ', 'T');
   var map   = { 'string': 'some text', 'integer': 42, 'flag': true, 'float': 1.23 };
   var json  = stringify(map);

@@ -5,7 +5,7 @@ class ComplexModel extends ModelMap
 {
   int integer;
   List<SimpleModel> modelList                 = new List<SimpleModel>();
-  Map<String, Date> dateMap                   = new Map<String, Date>();
+  Map<String, DateTime> dateMap               = new Map<String, DateTime>();
   Map<String, SimpleModel> modelMap           = new Map<String, SimpleModel>();
   Map<String, List<SimpleModel>> modelListMap = new Map<String, List<SimpleModel>>();
 }
@@ -13,7 +13,7 @@ class ComplexModel extends ModelMap
 
 void complexModelTest()
 {
-  var now       = new Date.now();
+  var now       = new DateTime.now();
   var today     = now.toString().replaceFirst(' ', 'T');
   var tomorrow  = now.add(new Duration(days: 1)).toString().replaceFirst(' ', 'T');
   var map       = {
