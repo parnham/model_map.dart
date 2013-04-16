@@ -1,3 +1,5 @@
+// Copyright (c) 2013, Dan Parnham. All rights reserved. Use of this source code
+// is governed by a BSD-style licence that can be found in the LICENSE file.
 
 library model_map;
 
@@ -105,15 +107,16 @@ abstract class ModelMap
     {
       if (!m.isPrivate && !m.isStatic)
       {
-        var n = m.simpleName;
+        var s = m.simpleName;
+        var n = MirrorSystem.getName(s);
 
-        switch (m.type.simpleName)
+        switch (MirrorSystem.getName(m.type.simpleName))
         {
-          case "String":  if (map[n] is String) futures.add(im.setField(n, map[n]));  break;
-          case "int":     if (map[n] is num)    futures.add(im.setField(n, map[n]));  break;
-          case "double":  if (map[n] is num)    futures.add(im.setField(n, map[n]));  break;
-          case "num":     if (map[n] is num)    futures.add(im.setField(n, map[n]));  break;
-          case "bool":    if (map[n] is bool)   futures.add(im.setField(n, map[n]));  break;
+          case "String":  if (map[n] is String) futures.add(im.setFieldAsync(s, map[n]));  break;
+          case "int":     if (map[n] is num)    futures.add(im.setFieldAsync(s, map[n]));  break;
+          case "double":  if (map[n] is num)    futures.add(im.setFieldAsync(s, map[n]));  break;
+          case "num":     if (map[n] is num)    futures.add(im.setFieldAsync(s, map[n]));  break;
+          case "bool":    if (map[n] is bool)   futures.add(im.setFieldAsync(s, map[n]));  break;
 
           case "DateTime":
             if (map.containsKey(n))
@@ -142,8 +145,8 @@ abstract class ModelMap
               }
               else
               {
-                futures.add(im.getField(n).then((i) =>
-                    subs.add(this._parseComplex(m.type.simpleName, i, map[n]))
+                futures.add(im.getFieldAsync(s).then((i) =>
+                    subs.add(this._parseComplex(MirrorSystem.getName(m.type.simpleName), i, map[n]))
                 ));
               }
             }
@@ -199,10 +202,10 @@ abstract class ModelMap
     {
       if (!m.isPrivate && !m.isStatic)
       {
-        var name  = m.simpleName;
-        var type  = m.type.simpleName;
+        var name  = MirrorSystem.getName(m.simpleName);
+        var type  = MirrorSystem.getName(m.type.simpleName);
 
-        futures.add(im.getField(name).then((f) {
+        futures.add(im.getFieldAsync(m.simpleName).then((f) {
             var item = f.reflectee;
 
             if (item != null)
@@ -362,10 +365,11 @@ abstract class ModelMap
         // Attempt to create a new instance by looking up its class mirror in the
         // current library. If the instance is descended from ModelMap then it can
         // be recursively populated.
-        var cm = currentMirrorSystem().isolate.rootLibrary.classes[type];
+        var s   = new Symbol(type);
+        var cm  = currentMirrorSystem().isolate.rootLibrary.classes[s];
         if (cm != null)
         {
-          cm.newInstance('', []).then((i) {
+          cm.newInstanceAsync(new Symbol(''), []).then((i) {
             if (i.reflectee is ModelMap)
             {
               i.reflectee.fromMap(value).then((r) => completer.complete(i.reflectee));
