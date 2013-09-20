@@ -54,7 +54,6 @@ You can also take an existing model and convert it to a map
 ```dart
 // A map of <String, dynamic>
 var map = model.toMap();
-});
 ```
 
 
