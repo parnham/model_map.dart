@@ -8,15 +8,9 @@ class InnerModel extends ModelMap
 }
 
 
-class UninitialisedOuterModel extends ModelMap
-{
-  InnerModel inner;
-}
-
-
 class OuterModel extends ModelMap
 {
-  InnerModel inner = new InnerModel();
+  InnerModel inner;
 }
 
 
@@ -24,27 +18,22 @@ void recursiveModelTest()
 {
   var map = { 'inner': { 'string': 'some text', 'integer': 42 } };
 
-
   group('Recursive model:', () {
-    test('Assign uninitialised model from map', () {
-      new UninitialisedOuterModel().fromMap(map).then(expectAsync1((model) {
-        expect(model.inner, isNull);
-      }));
-    });
-
     test('Assign model from map', () {
-      new OuterModel().fromMap(map).then(expectAsync1((model) {
-        expect(model.inner, isNotNull);
-        expect(model.inner.string, equals('some text'));
-        expect(model.inner.integer, equals(42));
-      }));
+			var model = new OuterModel().fromMap(map);
+
+			expect(model.inner, isNotNull);
+      expect(model.inner.string, equals('some text'));
+      expect(model.inner.integer, equals(42));
     });
 
     test('Extract model to map', () {
-      new OuterModel()
-          ..inner.string  = 'some text'
-          ..inner.integer = 42
-          ..toMap().then(expectAsync1((result) => expect(result, equals(map))));
+			var model = new OuterModel()
+				..inner					= new InnerModel()
+        ..inner.string  = 'some text'
+        ..inner.integer = 42;
+
+			expect(model.toMap(), equals(map));
     });
   });
 }

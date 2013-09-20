@@ -4,10 +4,10 @@ part of model_map_test;
 class ComplexModel extends ModelMap
 {
   int integer;
-  List<SimpleModel> modelList                 = new List<SimpleModel>();
-  Map<String, DateTime> dateMap               = new Map<String, DateTime>();
-  Map<String, SimpleModel> modelMap           = new Map<String, SimpleModel>();
-  Map<String, List<SimpleModel>> modelListMap = new Map<String, List<SimpleModel>>();
+  List<SimpleModel> modelList;
+  Map<String, DateTime> dateMap;
+  Map<String, SimpleModel> modelMap;
+  Map<String, List<SimpleModel>> modelListMap;
 }
 
 
@@ -27,29 +27,32 @@ void complexModelTest()
 
   group('Complex model:', () {
     test('Assign model from map', () {
-      new ComplexModel().fromMap(map).then(expectAsync1((model) {
-        expect(model.integer, equals(42));
-        expect(model.modelList.length, equals(2));
-        expect(model.modelList[1].float, equals(1.23));
-        expect(model.dateMap['Today'], equals(now));
-        expect(model.modelMap['first'].integer, equals(1));
-        expect(model.modelListMap['first'].length, equals(2));
-        expect(model.modelListMap['first'][1].string, equals('second model'));
-      }));
+			var model = new ComplexModel().fromMap(map);
+
+			expect(model.integer, equals(42));
+      expect(model.modelList.length, equals(2));
+      expect(model.modelList[1].float, equals(1.23));
+      expect(model.dateMap['Today'], equals(now));
+      expect(model.modelMap['first'].integer, equals(1));
+      expect(model.modelListMap['first'].length, equals(2));
+      expect(model.modelListMap['first'][1].string, equals('second model'));
     });
 
     test('Extract model to map', () {
-      new ComplexModel()
-          ..integer       = 42
-          ..modelList     = [
-              new SimpleModel()..string = 'a string'..flag = true,
-              new SimpleModel()..string = 'another string'..float = 1.23 ]
-          ..dateMap       = { 'Today': now, 'Tomorrow': now.add(new Duration(days: 1)) }
-          ..modelMap      = { 'first': new SimpleModel()..string = 'first model'..integer = 1 }
-          ..modelListMap  = { 'first': [
-              new SimpleModel()..string = 'first model',
-              new SimpleModel()..string = 'second model'..float = 1.23 ] }
-          ..toMap().then(expectAsync1((result) => expect(result, equals(map))));
+			var model = new ComplexModel()
+        ..integer       = 42
+        ..modelList     = [
+            new SimpleModel()..string = 'a string'..flag = true,
+            new SimpleModel()..string = 'another string'..float = 1.23
+				]
+        ..dateMap       = { 'Today': now, 'Tomorrow': now.add(new Duration(days: 1)) }
+        ..modelMap      = { 'first': new SimpleModel()..string = 'first model'..integer = 1 }
+        ..modelListMap  = { 'first': [
+            new SimpleModel()..string = 'first model',
+            new SimpleModel()..string = 'second model'..float = 1.23
+				]};
+
+			expect(model.toMap(), equals(map));
     });
   });
 }
