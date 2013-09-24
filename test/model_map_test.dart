@@ -12,11 +12,11 @@ part 'complex_model_test.dart';
 
 void main()
 {
-  simpleModelTest();
+	simpleModelTest();
 
-  collectionsModelTest();
+	collectionsModelTest();
 
-  recursiveModelTest();
+	recursiveModelTest();
 
-  complexModelTest();
+	complexModelTest();
 }
