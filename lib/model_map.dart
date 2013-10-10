@@ -3,7 +3,7 @@
 
 library model_map;
 
-import 'dart:json';
+import 'dart:convert';
 import 'dart:mirrors';
 
 
@@ -24,7 +24,7 @@ abstract class ModelMap
 	/// Returns itself
 	dynamic fromJson(String json)
 	{
-		return this.fromMap(parse(json));
+		return this.fromMap(JSON.decode(json));
 	}
 
 
@@ -128,7 +128,7 @@ abstract class ModelMap
 	/// Returns a JSON string representing this object instance.
 	String toJson()
 	{
-		return stringify(this.toMap());
+		return JSON.encode(this.toMap());
 	}
 
 

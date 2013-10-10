@@ -17,7 +17,7 @@ void simpleModelTest()
 	var now		= new DateTime.now();
 	var date	= now.toString().replaceFirst(' ', 'T');
 	var map		= { 'string': 'some text', 'integer': 42, 'flag': true, 'float': 1.23, 'date': date };
-	var json	= stringify(map);
+	var json	= JSON.encode(map);
 
 	group('Simple model:', () {
 		test('Assign values from map', () {

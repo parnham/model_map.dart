@@ -1,6 +1,6 @@
 library model_map_test;
 
-import 'dart:json';
+import 'dart:convert';
 import 'package:unittest/unittest.dart';
 import 'package:model_map/model_map.dart';
 
