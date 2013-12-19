@@ -59,8 +59,8 @@ abstract class ModelMap
 		switch(type.reflectedType)
 		{
 			case String:	return value is String ? value : null;
-			case int:		return value is num ? value : 0;
-			case double:	return value is num ? value : 0;
+			case int:		return value is num ? value.toInt() : 0;
+			case double:	return value is num ? value.toDouble() : 0;
 			case num:		return value is num ? value : 0;
 			case bool:		return value is bool ? value : false;
 			case DateTime:	return _parseDate(value);
