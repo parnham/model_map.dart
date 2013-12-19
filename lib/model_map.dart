@@ -38,7 +38,7 @@ abstract class ModelMap
 	dynamic fromMap(Map<String, dynamic> map)
 	{
 		var im		= reflect(this);
-		var members	= im.type.members.values;
+		var members	= im.type.declarations.values;
 
 		for (var m in members.where((m) => m is VariableMirror && !m.isPrivate && !m.isStatic))
 		{
@@ -86,7 +86,7 @@ abstract class ModelMap
 	/// correctly.
 	dynamic _parseComplex(ClassMirror type, dynamic value)
 	{
-		var result = type.newInstance(new Symbol(""), []).reflectee;
+		var result = type.newInstance(const Symbol(""), []).reflectee;
 
 		if (result is ModelMap && value is Map<String, dynamic>)
 		{
@@ -147,7 +147,8 @@ abstract class ModelMap
 	{
 		var result	= new Map<String, dynamic>();
 		var im		= reflect(this);
-		var members = im.type.members.values;
+		//var members = im.type.members.values;
+		var members = im.type.declarations.values;
 
 		for (var m in members.where((m) => m is VariableMirror && !m.isPrivate && !m.isStatic))
 		{
