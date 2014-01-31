@@ -14,11 +14,8 @@ be traversed and information about fields, properties and methods to be extracte
 is particularly useful if you wish to convert a serialized representation of an object
 such as JSON into an actual object instance.
 
-Be warned that mirrors are still being developed and so leading up to the release of
-Dart v1.0 there may still be breaking changes that would stop this library from functioning.
-
-Anything based on mirrors can not yet be fully compiled to javascript and so ModelMap is
-not recommended for browser application development at the moment.
+Mirrors are now properly supported in dart2js, so model_map will work even if compiled to
+javascript as long as you decorate your entity with @reflectable.
 
 At this stage ModelMap only worries about non-static, public fields and will ignore getters
 and setters.
@@ -62,6 +59,23 @@ var map = model.toMap();
 A couple of utility functions are included that simply wrap fromMap and toMap
 using the built-in parse and stringify capabilities so that you can simply call
 fromJson and toJson on your model instance.
+
+
+### Compiling to javascript
+
+Now that dart2js supports enough of the mirror system, ModelMap will work
+in a javascript application. One thing to be aware of is that dart2js
+performs tree shaking and to ensure that your entities can be mirrored properly
+when compiled to javascript you should decorate them with a helper attribute:
+
+```dart
+@reflectable
+class SimpleModel extends ModelMap
+{
+  String string;
+  int integer;
+}
+```
 
 
 ### Complex model

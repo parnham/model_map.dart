@@ -3,9 +3,13 @@
 
 library model_map;
 
-import 'dart:convert';
+@MirrorsUsed(metaTargets: const [ Reflectable ], override: '*')
 import 'dart:mirrors';
+import 'dart:convert';
 
+
+const Reflectable reflectable = const Reflectable();
+class Reflectable { const Reflectable(); }
 
 /// ModelMap is an experiment with mirrors.
 ///
@@ -42,12 +46,12 @@ abstract class ModelMap
 
 		for (var m in members.where((m) => m is VariableMirror && !m.isPrivate && !m.isStatic))
 		{
-				var name = MirrorSystem.getName(m.simpleName);
+			var name = MirrorSystem.getName(m.simpleName);
 
-				if (m.type is ClassMirror && map.containsKey(name))
-				{
-					im.setField(m.simpleName, _parseValue(m.type, map[name]));
-				}
+			if (m.type is ClassMirror && map.containsKey(name))
+			{
+				im.setField(m.simpleName, _parseValue(m.type, map[name]));
+			}
 		}
 
 		return this;
@@ -56,16 +60,14 @@ abstract class ModelMap
 	/// Parses a value based on the expected type
 	dynamic _parseValue(ClassMirror type, dynamic value)
 	{
-		switch(type.reflectedType)
-		{
-			case String:	return value is String ? value : null;
-			case int:		return value is num ? value.toInt() : 0;
-			case double:	return value is num ? value.toDouble() : 0;
-			case num:		return value is num ? value : 0;
-			case bool:		return value is bool ? value : false;
-			case DateTime:	return _parseDate(value);
-			default: 		return _parseComplex(type, value);
-		}
+		if (type.reflectedType == String) 	return value is String ? value : null;
+		if (type.reflectedType == int)		return value is num ? value.toInt() : 0;
+		if (type.reflectedType == double)	return value is num ? value.toDouble() : 0;
+		if (type.reflectedType == num)		return value is num ? value : 0;
+		if (type.reflectedType == bool)		return value is bool ? value : false;
+		if (type.reflectedType == DateTime)	return _parseDate(value);
+
+		return _parseComplex(type, value);
 	}
 
 
@@ -147,7 +149,6 @@ abstract class ModelMap
 	{
 		var result	= new Map<String, dynamic>();
 		var im		= reflect(this);
-		//var members = im.type.members.values;
 		var members = im.type.declarations.values;
 
 		for (var m in members.where((m) => m is VariableMirror && !m.isPrivate && !m.isStatic))
